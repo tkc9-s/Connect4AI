@@ -58,7 +58,6 @@ public class Connect4Core {
 	 * Handles if a move a player makes is valid and, if so, makes the move
 	 * Evaluates a win state after a valid move is made.
 	 * If there is a winner, end the game.
-	 * 
 	 * @param x The move the player is trying to make.
 	 */
 	public void makeMove(int x) {
