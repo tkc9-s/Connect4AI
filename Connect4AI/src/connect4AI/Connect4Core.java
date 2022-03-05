@@ -1,10 +1,11 @@
 package connect4AI;
+
 /**
  * This is the core class for the game of Connect 4.
  * This contains all of the core game logic.
  * There is no AI in here.
  * 
- * @author Thomas Kennedy
+ * @author Thomas Kennedy, Josh Banaszak
  */
 public class Connect4Core {
 	private int boardSize;
@@ -26,12 +27,11 @@ public class Connect4Core {
 	
 	/**
 	 * Optional Constructor. Allows the specification of a board size (All boards are squares)
-	 * @param size The dimensions of the board. Must be greater than 3.
+	 * @param size The dimensions of the board. Must be greater than 3 and less than 10.
 	 */
 	public Connect4Core(int size) {
-		if (size > 3) boardSize = size;
+		if (size > 3 && size < 10) boardSize = size;
 		else boardSize = 4;
-		
 		board = new char[boardSize][boardSize];
 		currentPlayer = 'X';
 		gameState = false;
@@ -53,7 +53,35 @@ public class Connect4Core {
 		gameState = false;
 		turnCount = 0;
 	}
-	
+	/**
+	 * Copy constructor. Allows the game to be copied over to the AI class (Slightly buggy at the moment).
+	 * @param game The game to be copied, exclusively used in AI class.
+	 */
+	public Connect4Core(Connect4Core game) {
+		this.boardSize = game.boardSize;
+		this.board = game.board;
+		this.currentPlayer = game.currentPlayer;
+		this.gameState = game.gameState;
+		this.turnCount = game.turnCount;
+	}
+	/**
+	 * A check to see if a move is allowed. Basically the first part of makeMove() but singled out into its own function.
+	 * @param x the column of the move made
+	 * @return true if it can be made, false if it is invalid
+	 */
+	public boolean isAllowed(int x) {
+		boolean canMake = false;
+		
+		if(x >= 0 && x < boardSize) {
+			for(int i = 0; i < boardSize; i++) {
+				if (Character.getNumericValue(board[i][x]) == -1) {
+					canMake = true;
+
+			}
+		}
+	}
+		return canMake;
+	}
 	/**
 	 * Handles if a move a player makes is valid and, if so, makes the move
 	 * Evaluates a win state after a valid move is made.
@@ -94,10 +122,12 @@ public class Connect4Core {
 			System.out.println("Game is over!");
 		}
 		else {
-			System.out.println("Invalid Move! Try again!");
+			System.out.println("Invalid Move! Try again!"); 
 		}
 	}
 	
+
+
 	/**
 	 * Checks if the game has a winner.
 	 * This method was courtesy of StackOverflow and I am not afraid to admit that.
@@ -166,6 +196,27 @@ public class Connect4Core {
 		gameState = false;
 		turnCount = 0;
 	}
+	/**
+	 * Handles undoing moves by setting the square to blank and decrementing the turn count. 
+	 * Primarily used within the AI.
+	 * @param x the row value
+	 * @param y the column value
+	 */
+	public void undoMove(int x, int y) {
+		if(board[x][y] == 'X' || board[x][y] == 'O') {
+			setBoardAt(x, y, Character.MIN_VALUE);
+			//turnCount--;
+			//System.out.println("UNDOING"); //Debugging for the undo function
+		}
+		
+		//System.out.println(toString()); //Debugging for the undo function 
+		
+		if (!gameState) {
+			if (currentPlayer == 'X') currentPlayer = 'O';
+			else currentPlayer = 'X';
+		}
+
+	}
 	
 	/**
 	 * Returns the game board.
@@ -200,6 +251,21 @@ public class Connect4Core {
 	}
 	
 	//-------------Getters and Setters below this line-------------\\
+	public int[] getRow(int rowNum) {
+		int[] row = new int [boardSize];
+		for(int i = 0; i < boardSize; i++) {
+			row[i] = getBoardAt(rowNum, i);
+		}
+		return row;
+	}
+	public int[] getCol(int colNum) {
+		int[] col = new int [boardSize];
+		for(int i = 0; i < boardSize; i++) {
+			col[i] = getBoardAt(i, colNum);
+		}
+		return col;
+	}
+	
 	public int getBoardSize() {
 		return boardSize;
 	}
