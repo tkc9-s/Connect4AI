@@ -52,15 +52,9 @@ public class Connect4AI {
 		if(game.checkForWin() == true && game.getCurrentPlayer() == 'X') {
 			playerXScore += 10000;
 		}
-		
-	//	for(int i = 0; i < game.getBoardSize() - 3; i++) { 
-		//	if(game.getBoardAt(i, 3) == 88) {
-		//		playerXScore += 1000;
-		//}
-		//}
 
 		bestScore = playerOScore - playerXScore ;
-		System.out.println(bestScore);
+		//System.out.println(bestScore);
 		
 		return bestScore;
 		}
