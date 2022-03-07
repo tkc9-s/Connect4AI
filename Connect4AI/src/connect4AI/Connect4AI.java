@@ -6,51 +6,40 @@ import java.util.Random;
 /**
  * This class is all about the AI for the Connect 4 Game.
  * It will be able to get the gamestate from the game itself, and make decisions based on that.
- * @author Thomas Kennedy, Josh Banaszak
+ * @author Josh Banaszak, Thomas Kennedy
  */
 public class Connect4AI {
 	private int difficulty;// How many layers deep the AI will compute potential moves 
-	//private int bestScore = 0;
-	private int score;
 	private int maxScore;
 	private int minScore;
-	private int bestMove = -1;
-	private int maxMove;
-	private int minMove;
-	private int playerOScore;
-	private int playerXScore;
-	public Connect4AI() {
-		difficulty = 2; //CURRENTLY ONLY WORKS ON THIS DIFFICULTY
+	private int bestMove;
 
+	public Connect4AI() {
+		difficulty = 2; //CURRENTLY ONLY WORKS ON DIFFICULTY 2
+		bestMove = -1;
 	}
 	
 	public Connect4AI(int dif) {
 		difficulty = dif;
+		bestMove = -1;
 	}
 
-
+	/**
+	 * This is the evaluation function for minimax(). Returns a score that is used to determine the next move.
+	 * @param game the current game board
+	 * @return bestScore which is the highest score that was calculated
+	 */
 	public int score(Connect4Core game) { 
-		
-		//TODO tune this implementation or make a better one.
 	    int bestScore = 0;
-		playerOScore = 0;
-		playerXScore = 0;
-		int[] rowArray = new int[game.getBoardSize()];
-		int [] colArray = new int[game.getBoardSize()];
-		/**
-		 * simply gets a score if anyone is about to win and bases the move off of that.
-		 */
-		for(int i = 0; i < game.getBoardSize(); i++) {
-			rowArray = game.getRow(i);
-			colArray = game.getCol(i);
-			//System.out.println(rowArray[i]  + "         ARRAYS AT i   =    " + i + "   "+ colArray[i]);
-		}
+	    int playerOScore = 0;
+	    int playerXScore = 0; 
+
 		
 		if(game.checkForWin() == true && game.getCurrentPlayer() == 'O') {
-			playerOScore += 1000000;
+			playerOScore += 1000;
 		}
 		if(game.checkForWin() == true && game.getCurrentPlayer() == 'X') {
-			playerXScore += 10000;
+			playerXScore += 10000000;
 		}
 
 		bestScore = playerOScore - playerXScore ;
@@ -58,13 +47,8 @@ public class Connect4AI {
 		
 		return bestScore;
 		}
-	
-	public int evaluate(Connect4Core game) {
-		int score;//temp value
-		score = score(game);
-		return score;
-}
-	
+
+
 	/**
 	 * The alpha beta search algorithm. looks through all possible moves, simulates it, gets a score for it and attempts to pick the best possible move.
 	 * @param depth how deep the search should go
@@ -75,13 +59,13 @@ public class Connect4AI {
 	 * @return an int representing the column the move will be placed in.
 	 */
 	public int minimax(int depth, Connect4Core game, boolean isMax, int alpha, int beta) { 
+		int score = 0;
 		if(depth == difficulty || game.checkForWin() == true) {
-			//bestScore = evaluate(game);
-			return evaluate(game);
+			return score(game);
 		}
 		
 		
-		if(isMax == true) {//maximum (alpha)
+		if(isMax == true) {//maximum
 			maxScore = Integer.MIN_VALUE;
 			 for(int i = 0; i < game.getBoardSize(); i++) {
 				 for(int j = 0; j < game.getBoardSize(); j++) {
@@ -109,7 +93,7 @@ public class Connect4AI {
 			 }
 			 
 		
-		else { //minimum (beta)
+		else { //minimum 
 			minScore = Integer.MAX_VALUE;
 				for(int i = 0; i < game.getBoardSize(); i++) {
 					for(int j = 0; j < game.getBoardSize(); j++) {
@@ -120,7 +104,7 @@ public class Connect4AI {
 							 game.undoMove(i,j);
 							 	if(score < minScore) {
 							 		minScore = score;
-							 		minMove = j;
+							 		//minMove = j;
 							 }
 
 							 
@@ -139,27 +123,23 @@ public class Connect4AI {
 	/**
 	 * Launches the initial call to minimax, begins the search tree.
 	 * @param game, the entire game state that minimax will use.
-	 * @return move which represents the column that will be played.
+	 * @return bestMove which represents the column that will be played.
 	 */
 	public int decide(Connect4Core game) {
+		bestMove = -1;
 		Random rng = new Random();
-		int move = 5;
 		Connect4Core copy = new Connect4Core(game);
 		
-		move = minimax(0, copy, true, Integer.MIN_VALUE, Integer.MAX_VALUE); 
-		//System.out.println(bestScore + "move" + move);
-		//System.out.println("MOVE IS    " + move);
-		//System.out.println("BESTMOVE IS" + bestMove);
-		
+		minimax(0, copy, true, Integer.MIN_VALUE, Integer.MAX_VALUE); 
+
 		//System.out.println(move); 
-		//if(bestMove < 0|| move > game.getBoardSize() || game.isAllowed(move) == false) { //randomly picks a column, currently unused
-		//move = rng.nextInt(game.getBoardSize());
-	//	while(game.isAllowed(move) == false) {
-		//	move = rng.nextInt(game.getBoardSize());
-	//	}
-		
-		//System.out.println("rng used!!!!!");
-		//}
+		if(bestMove == 0|| game.isAllowed(bestMove) == false) { //randomly picks a column
+		bestMove = rng.nextInt(game.getBoardSize());
+	     while(game.isAllowed(bestMove) == false) {
+			bestMove = rng.nextInt(game.getBoardSize());
+		}
+
+		}
 		return bestMove;
 	}
 }

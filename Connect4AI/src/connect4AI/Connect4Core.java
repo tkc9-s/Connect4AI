@@ -44,8 +44,8 @@ public class Connect4Core {
 	 * @param firstPlayer Which player is going first. Should either be an X or O. If it isn't either of those, defaults to X
 	 */
 	public Connect4Core(int size, char firstPlayer) {
-		if (size > 3) boardSize = size;
-		else boardSize = 4;
+		if (size > 3 && size < 10) boardSize = size;
+		else boardSize = 5;
 		
 		board = new char[boardSize][boardSize];
 		if (Character.toUpperCase(firstPlayer) == 'X' || Character.toUpperCase(firstPlayer) == 'O')currentPlayer = Character.toUpperCase(firstPlayer);
@@ -205,11 +205,8 @@ public class Connect4Core {
 	public void undoMove(int x, int y) {
 		if(board[x][y] == 'X' || board[x][y] == 'O') {
 			setBoardAt(x, y, Character.MIN_VALUE);
-			//turnCount--;
-			//System.out.println("UNDOING"); //Debugging for the undo function
 		}
 		
-		//System.out.println(toString()); //Debugging for the undo function 
 		
 		if (!gameState) {
 			if (currentPlayer == 'X') currentPlayer = 'O';
