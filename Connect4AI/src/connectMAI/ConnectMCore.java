@@ -1,4 +1,4 @@
-package connect4AI;
+package connectMAI;
 
 /**
  * This is the core class for the game of Connect 4.
@@ -7,7 +7,7 @@ package connect4AI;
  * 
  * @author Thomas Kennedy, Josh Banaszak
  */
-public class Connect4Core {
+public class ConnectMCore {
 	private int boardSize;
 	private char[][] board;
 	private char currentPlayer;
@@ -15,9 +15,9 @@ public class Connect4Core {
 	private int turnCount;
 	
 	/**
-	 * Default Constructor. Makes a Connect4Core with default settings
+	 * Default Constructor. Makes a ConnectMCore with default settings
 	 */
-	public Connect4Core() {
+	public ConnectMCore() {
 		boardSize = 6;
 		board = new char[boardSize][boardSize];
 		currentPlayer = 'X';
@@ -29,7 +29,7 @@ public class Connect4Core {
 	 * Optional Constructor. Allows the specification of a board size (All boards are squares)
 	 * @param size The dimensions of the board. Must be greater than 3 and less than 10.
 	 */
-	public Connect4Core(int size) {
+	public ConnectMCore(int size) {
 		if (size > 3 && size < 10) boardSize = size;
 		else boardSize = 4;
 		board = new char[boardSize][boardSize];
@@ -43,7 +43,7 @@ public class Connect4Core {
 	 * @param size The dimensions of the board (Boards are squares). 
 	 * @param firstPlayer Which player is going first. Should either be an X or O. If it isn't either of those, defaults to X
 	 */
-	public Connect4Core(int size, char firstPlayer) {
+	public ConnectMCore(int size, char firstPlayer) {
 		if (size > 3 && size < 10) boardSize = size;
 		else boardSize = 5;
 		
@@ -53,17 +53,19 @@ public class Connect4Core {
 		gameState = false;
 		turnCount = 0;
 	}
+	
 	/**
 	 * Copy constructor. Allows the game to be copied over to the AI class (Slightly buggy at the moment).
 	 * @param game The game to be copied, exclusively used in AI class.
 	 */
-	public Connect4Core(Connect4Core game) {
+	public ConnectMCore(ConnectMCore game) {
 		this.boardSize = game.boardSize;
 		this.board = game.board;
 		this.currentPlayer = game.currentPlayer;
 		this.gameState = game.gameState;
 		this.turnCount = game.turnCount;
 	}
+	
 	/**
 	 * A check to see if a move is allowed. Basically the first part of makeMove() but singled out into its own function.
 	 * @param x the column of the move made
@@ -82,6 +84,7 @@ public class Connect4Core {
 	}
 		return canMake;
 	}
+	
 	/**
 	 * Handles if a move a player makes is valid and, if so, makes the move
 	 * Evaluates a win state after a valid move is made.
@@ -196,6 +199,7 @@ public class Connect4Core {
 		gameState = false;
 		turnCount = 0;
 	}
+	
 	/**
 	 * Handles undoing moves by setting the square to blank and decrementing the turn count. 
 	 * Primarily used within the AI.

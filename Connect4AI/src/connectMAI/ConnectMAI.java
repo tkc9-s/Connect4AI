@@ -1,4 +1,4 @@
-package connect4AI;
+package connectMAI;
 
 import java.util.Random;
 
@@ -8,18 +8,18 @@ import java.util.Random;
  * It will be able to get the gamestate from the game itself, and make decisions based on that.
  * @author Josh Banaszak, Thomas Kennedy
  */
-public class Connect4AI {
+public class ConnectMAI {
 	private int difficulty;// How many layers deep the AI will compute potential moves 
 	private int maxScore;
 	private int minScore;
 	private int bestMove;
 
-	public Connect4AI() {
+	public ConnectMAI() {
 		difficulty = 2; //CURRENTLY ONLY WORKS ON DIFFICULTY 2
 		bestMove = -1;
 	}
 	
-	public Connect4AI(int dif) {
+	public ConnectMAI(int dif) {
 		difficulty = dif;
 		bestMove = -1;
 	}
@@ -29,7 +29,7 @@ public class Connect4AI {
 	 * @param game the current game board
 	 * @return bestScore which is the highest score that was calculated
 	 */
-	public int score(Connect4Core game) { 
+	public int score(ConnectMCore game) { 
 	    int bestScore = 0;
 	    int playerOScore = 0;
 	    int playerXScore = 0; 
@@ -58,7 +58,7 @@ public class Connect4AI {
 	 * @param beta the beta value of the alpha beta pruning
 	 * @return an int representing the column the move will be placed in.
 	 */
-	public int minimax(int depth, Connect4Core game, boolean isMax, int alpha, int beta) { 
+	public int minimax(int depth, ConnectMCore game, boolean isMax, int alpha, int beta) { 
 		int score = 0;
 		if(depth == difficulty || game.checkForWin() == true) {
 			return score(game);
@@ -125,10 +125,10 @@ public class Connect4AI {
 	 * @param game, the entire game state that minimax will use.
 	 * @return bestMove which represents the column that will be played.
 	 */
-	public int decide(Connect4Core game) {
+	public int decide(ConnectMCore game) {
 		bestMove = -1;
 		Random rng = new Random();
-		Connect4Core copy = new Connect4Core(game);
+		ConnectMCore copy = new ConnectMCore(game);
 		
 		minimax(0, copy, true, Integer.MIN_VALUE, Integer.MAX_VALUE); 
 
